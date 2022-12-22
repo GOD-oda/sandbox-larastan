@@ -3,8 +3,21 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/php/Dockerfile
     volumes:
       - type: bind
         source: ./src
         target: /src
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=laravel
+volumes:
+  db:
